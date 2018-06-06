@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: k8s-java-client-example-pod
+spec:
+  containers:
+  - name: k8s-java-client-example
+    image: k8s-java-client-example:native-kubernetes

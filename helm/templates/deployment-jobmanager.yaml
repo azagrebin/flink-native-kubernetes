@@ -1,0 +1,40 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}-jobmanager
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: flink
+        component: jobmanager
+    spec:
+      containers:
+      - name: jobmanager
+        image: {{ .Values.image }}:{{ .Values.imageTag }}
+        #imagePullPolicy: {{ .Values.imagePullPolicy }}
+        args:
+        - cluster
+        ports:
+        - containerPort: 6123
+          name: rpc
+        - containerPort: 6124
+          name: blob
+        - containerPort: 6125
+          name: query
+        - containerPort: 8081
+          name: ui
+        env:
+        - name: JOB_MANAGER_RPC_ADDRESS
+          value: {{ template "fullname" . }}-session-cluster
+        - name: KUBERNETES_IMAGE_NAME
+          value: {{ .Values.image }}:{{ .Values.imageTag }}
+        - name: KUBERNETES_CLUSTER_ID
+          value: foobar
+        livenessProbe:
+          httpGet:
+            path: /overview
+            port: 8081
+          initialDelaySeconds: 30
+          periodSeconds: 10

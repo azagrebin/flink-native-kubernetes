@@ -1,0 +1,7 @@
+image: flink
+imageTag: native-kubernetes
+imagePullPolicy: Always
+
+flink:
+  jobmanager_heap_mb: 1024
+  taskmanager_heap_mb: 1024
